@@ -1,0 +1,113 @@
+{
+  "$project": "PomoLive",
+  "$description": "Catalogo de eventos WebSocket trocados entre Frontend e Backend",
+  "client_to_server": {
+    "SESSION_START": {
+      "event": "SESSION_START",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "topic": "Estruturas de Dados: Arvores AVL",
+        "persona_id": "socratic_mentor",
+        "focus_duration_minutes": 25,
+        "break_duration_minutes": 5,
+        "max_checkin_turns": 3
+      }
+    },
+    "TIMER_EXPIRED": {
+      "event": "TIMER_EXPIRED",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "completed_focus_minutes": 25
+      }
+    },
+    "AUDIO_CHUNK": {
+      "event": "AUDIO_CHUNK",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "format": "audio/pcm;rate=16000",
+        "data": "base64-encoded-pcm16-bytes"
+      }
+    },
+    "CHECKIN_COMPLETE_MANUAL": {
+      "event": "CHECKIN_COMPLETE_MANUAL",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {}
+    },
+    "SESSION_ABORT": {
+      "event": "SESSION_ABORT",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "reason": "user_cancelled"
+      }
+    }
+  },
+  "server_to_client": {
+    "SESSION_STATE_CHANGED": {
+      "event": "SESSION_STATE_CHANGED",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "previous_state": "FOCUS",
+        "current_state": "ACTIVE_DISCUSSION",
+        "reason": "TIMER_EXPIRED"
+      }
+    },
+    "TIMER_EXTENDED": {
+      "event": "TIMER_EXTENDED",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "additional_minutes": 10,
+        "reason": "user_voice_request"
+      }
+    },
+    "AI_AUDIO_CHUNK": {
+      "event": "AI_AUDIO_CHUNK",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "format": "audio/pcm;rate=24000",
+        "data": "base64-encoded-pcm16-bytes"
+      }
+    },
+    "AI_TURN_METRICS": {
+      "event": "AI_TURN_METRICS",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "current_turn": 1,
+        "max_turns": 3,
+        "user_transcript": "string",
+        "ai_transcript": "string"
+      }
+    },
+    "SESSION_SAVED": {
+      "event": "SESSION_SAVED",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "db_id": 1,
+        "topic": "Estruturas de Dados: Arvores AVL",
+        "focus_minutes": 25,
+        "turns_executed": 3,
+        "summary": "string",
+        "break_duration_minutes": 5
+      }
+    },
+    "ERROR": {
+      "event": "ERROR",
+      "session_id": "string-uuid-v4",
+      "timestamp": "ISO-8601-UTC",
+      "payload": {
+        "code": "STRING_ERROR_CODE",
+        "message": "Mensagem descritiva de erro",
+        "recoverable": true
+      }
+    }
+  }
+}

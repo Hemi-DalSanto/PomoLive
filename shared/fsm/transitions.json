@@ -1,0 +1,94 @@
+{
+  "$project": "PomoLive",
+  "$description": "Definicao estrita de Estados e Transicoes Permitidas da FSM",
+  "initial_state": "IDLE",
+  "states": [
+    "IDLE",
+    "FOCUS",
+    "CHECKIN_CONNECTING",
+    "ACTIVE_DISCUSSION",
+    "PERSISTING",
+    "BREAK",
+    "ERROR"
+  ],
+  "transitions": [
+    {
+      "from": "IDLE",
+      "trigger": "SESSION_START",
+      "to": "FOCUS",
+      "description": "Usuario inicia um novo bloco de foco apos setup."
+    },
+    {
+      "from": "FOCUS",
+      "trigger": "TIMER_EXPIRED",
+      "to": "CHECKIN_CONNECTING",
+      "description": "Tempo de foco zerou no cliente; backend prepara canal com Gemini."
+    },
+    {
+      "from": "FOCUS",
+      "trigger": "SESSION_ABORT",
+      "to": "IDLE",
+      "description": "Usuario cancelou o ciclo durante o foco."
+    },
+    {
+      "from": "CHECKIN_CONNECTING",
+      "trigger": "GEMINI_READY",
+      "to": "ACTIVE_DISCUSSION",
+      "description": "Sessao Live iniciada e prompt de abertura emitido pela IA."
+    },
+    {
+      "from": "CHECKIN_CONNECTING",
+      "trigger": "ERROR",
+      "to": "ERROR",
+      "description": "Falha na negociacao com Gemini Live API."
+    },
+    {
+      "from": "ACTIVE_DISCUSSION",
+      "trigger": "EXTEND_TIME_TOOL_CALLED",
+      "to": "FOCUS",
+      "description": "IA acionou a ferramenta de estender tempo por pedido de voz; canal fecha e timer reinicia."
+    },
+    {
+      "from": "ACTIVE_DISCUSSION",
+      "trigger": "TURN_LIMIT_REACHED",
+      "to": "PERSISTING",
+      "description": "Teto de interacoes da checagem foi atingido."
+    },
+    {
+      "from": "ACTIVE_DISCUSSION",
+      "trigger": "CHECKIN_COMPLETE_MANUAL",
+      "to": "PERSISTING",
+      "description": "Usuario finalizou ativamente a checagem antes do teto."
+    },
+    {
+      "from": "ACTIVE_DISCUSSION",
+      "trigger": "ERROR",
+      "to": "ERROR",
+      "description": "Falha no canal de audio durante a checagem."
+    },
+    {
+      "from": "PERSISTING",
+      "trigger": "SESSION_SAVED",
+      "to": "BREAK",
+      "description": "Dados registrados com sucesso no SQLite; inicia contagem de descanso."
+    },
+    {
+      "from": "PERSISTING",
+      "trigger": "ERROR",
+      "to": "ERROR",
+      "description": "Erro de I/O ao gravar resumo no banco local."
+    },
+    {
+      "from": "BREAK",
+      "trigger": "TIMER_EXPIRED",
+      "to": "IDLE",
+      "description": "Tempo de descanso finalizado; sistema apto para novo ciclo."
+    },
+    {
+      "from": "ERROR",
+      "trigger": "RESET",
+      "to": "IDLE",
+      "description": "Tratamento de erro finalizado, resetando a aplicacao."
+    }
+  ]
+}
