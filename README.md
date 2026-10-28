@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=for-the-badge)
+
 # PomoLive 🍅🎙️
 
 > Aplicação modular de foco e estudo ativo combinando temporizador Pomodoro customizável e assistente de voz socrático via **Gemini Multimodal Live API**.
